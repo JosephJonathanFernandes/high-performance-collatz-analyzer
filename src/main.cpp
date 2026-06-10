@@ -30,6 +30,7 @@
 #include "research/AdvancedBinaryAnalyzer.hpp"
 #include "research/ReportGenerator.hpp"
 #include "research/OddToOddDriftSpectrum.hpp"
+#include "research/GrowthConvergenceAnalyzer.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -60,6 +61,7 @@ void print_help() {
     cout << "  advanced_binary    <limit> <modulo>      19-feature advanced binary analysis\n";
     cout << "  report                                   Auto-generate research_report.md\n";
     cout << "  drift_spectrum     <limit> <modulo>      E[log(T(n)/n)] drift spectrum analysis\n";
+    cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
 }
@@ -78,7 +80,7 @@ int main(int argc, char* argv[]) {
     string module = argv[1];
     unsigned long long limit = 1000000;
 
-    if (argc > 2) {
+    if (argc > 2 && module != "report" && module != "k_convergence") {
         try {
             limit = stoull(argv[2]);
         } catch (...) {
@@ -152,6 +154,11 @@ int main(int argc, char* argv[]) {
     else if (module == "drift_spectrum") {
         unsigned long long modulo = (argc > 3) ? stoull(argv[3]) : 1024;
         OddToOddDriftSpectrum::analyze(limit, modulo);
+    }
+    else if (module == "k_convergence") {
+        string file = (argc > 2) ? argv[2] : "data/csv/reverse_tree_100.csv";
+        int start_depth = (argc > 3) ? stoi(argv[3]) : 30;
+        GrowthConvergenceAnalyzer::analyze(file, start_depth);
     }
     else if (module == "all") {
         ReverseTreeExplorer::analyze(25); // Hardcoded depth for 'all' to prevent lockups

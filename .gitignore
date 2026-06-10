@@ -51,3 +51,12 @@ out/
 # Environment and Secrets
 .env
 .env.local
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data Exports
+data/csv/
+*.csv
