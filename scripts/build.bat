@@ -4,13 +4,13 @@ echo Building High-Performance Collatz Analyzer...
 if not exist build (
     mkdir build
 )
-cd build
 
-echo Configuring CMake...
-cmake ..
+echo Compiling Main Application...
+g++ src\main.cpp -o build\collatz.exe -O3 -I src
 
-echo Compiling Release Build...
-cmake --build . --config Release
+echo Compiling Test Suite...
+g++ tests\test_collatz.cpp -o build\collatz_test.exe -O3 -I src
 
-echo Build Complete. You can run the executable at build\Release\collatz.exe
-cd ..
+echo Build Complete.
+echo Executable: build\collatz.exe
+echo Test Suite: build\collatz_test.exe
