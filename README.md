@@ -9,15 +9,25 @@ This toolkit has computationally validated four major quantitative properties of
 1. **Best predictor of stopping-time variation**
    Average odd-to-odd logarithmic drift $E[\log(T(n)/n)]$ exhibits a **Pearson correlation of 0.9730** with average stopping time. A single drift feature explains **94.67% of stopping-time variance**.
 
+   ![Stopping Time vs Logarithmic Drift](data/drift_scatter.png)
+
 2. **Reverse-tree growth constant**
    The reverse Collatz tree exhibits near-perfect exponential growth from depths 30–80. Least-squares fitting yields a highly stable growth constant of:
    $k \approx 1.2637$  ($R^2 = 1.000000$)
+
+   ![Reverse Tree Growth](data/tree_growth.png)
 
 3. **Hardest residue classes**
    Among residue classes mod $2^k$, classes of the form $2^k-1$ (all 1-bits) consistently exhibit the highest average stopping times (validated for 7/7 moduli levels).
 
 4. **Easiest residue classes**
    Classes featuring alternating-bit patterns (e.g., 21, 85, 341, 1365) consistently minimize average stopping time. This occurs when $(2^k-1)/3$ is an integer.
+
+   ![Residue Evolution](data/residue_evolution.png)
+
+   *Detailed 64×64 difficulty mapping reveals the localized regions of extreme stopping times (bottom right corner corresponding to the highest 1-bit density).*
+
+   ![Difficulty Heatmap](data/heatmap.png)
 
 This establishes a clear causal chain:
 ```
