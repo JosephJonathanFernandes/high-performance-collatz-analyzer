@@ -78,20 +78,29 @@ def visualize_heatmap():
         return
         
     file = max(files, key=os.path.getctime)
-    df = pd.read_csv(file, header=None)
+    df = pd.read_csv(file)
+    
+    n = len(df)
+    cols = int(np.ceil(np.sqrt(n)))
+    rows = int(np.ceil(n / cols))
+    
+    values = df['avg_stopping_time'].values
+    if len(values) < rows * cols:
+        values = np.pad(values, (0, rows * cols - len(values)), constant_values=np.nan)
+        
+    grid = values.reshape((rows, cols))
     
     plt.figure(figsize=(8, 7))
     sns.heatmap(
-        df, 
+        grid, 
         cmap="YlOrRd", 
         cbar_kws={'label': 'Average Stopping Time'},
         xticklabels=False,
-        yticklabels=False
+        yticklabels=False,
+        mask=np.isnan(grid)
     )
     
-    plt.title('Collatz Difficulty Heatmap (Mod 64)', fontsize=14, fontweight='bold', pad=15)
-    plt.xlabel('Lower Bits', fontsize=12)
-    plt.ylabel('Upper Bits', fontsize=12)
+    plt.title(f'Collatz Difficulty Heatmap (N={n} Odd Residues)', fontsize=14, fontweight='bold', pad=15)
     
     plt.tight_layout()
     plt.savefig('data/heatmap.png', bbox_inches='tight')
