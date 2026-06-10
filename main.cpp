@@ -20,6 +20,8 @@
 #include <iomanip>
 #include <string>
 #include <windows.h> // Using Win32 threading to support older MinGW builds without std::thread
+#include "ReverseTree.h"
+#include "OddToOdd.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -414,7 +416,16 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // 1. Run original optimization benchmarks
     run_benchmark(limit);
+
+    // 2. Run Reverse Collatz Tree generation
+    // 25 is a sensible default depth that executes in a few seconds and shows exponential growth
+    int max_depth = 25; 
+    ReverseTreeAnalyzer::analyze(max_depth);
+    
+    // 3. Run Compressed Odd-to-Odd Map analysis
+    OddToOddAnalyzer::analyze(limit);
 
     return 0;
 }
