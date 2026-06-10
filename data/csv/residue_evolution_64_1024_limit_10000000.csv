@@ -1,0 +1,6 @@
+modulo,hardest_residue,hardest_avg_steps,easiest_residue,easiest_avg_steps,conjecture_2k_minus_1_holds,conjecture_rk_holds
+64,63,126.7323,21,88.5938,1,1
+128,127,130.6051,85,84.7045,1,0
+256,255,134.4985,85,80.9369,1,1
+512,511,138.3898,341,77.0088,1,0
+1024,1023,142.5554,341,73.7155,1,1

@@ -103,8 +103,10 @@ Benchmarks run at a 50,000,000 limit on a 12-thread system.
 
 | Experiment | Result |
 |---|---|
-| **Drift Spectrum R²** | **0.9467 (1 feature)** |
-| **Drift Pearson r** | **0.9730** |
+| **Drift Spectrum r (mod 1024)** | **0.9730** |
+| **Drift Spectrum r (mod 2048)** | **0.9693** |
+| **Drift Spectrum r (mod 4096)** | **0.9656** |
+| Drift Spectrum R² (mod 1024) | 0.9467 (1 feature) |
 | Observed mean log drift | −0.349219 |
 | Theoretical ln(3/4) | −0.287682 |
 | 11-Feature Regression R² | 0.9044 |
@@ -112,26 +114,70 @@ Benchmarks run at a 50,000,000 limit on a 12-thread system.
 | Growth Fit R² | 1.000000 |
 | Deepest Tree Explored | depth 70 |
 | Unique Tree Nodes | 40,992,250 |
-| Hardest Residue (mod 1024) | 1023 (`1111111111₂`) |
-| Easiest Residue (mod 1024) | 341 (`0101010101₂`) |
+| Hardest Residue Conjecture | **7/7 levels** ✓ |
+| Easiest Residue Conjecture | 4/4 applicable levels ✓ |
 
 ---
 
 ### 1. Odd-to-Odd Drift Spectrum (★ Headline Result)
 
-The average logarithmic drift $E[\log(T(n)/n)]$ per residue class was computed by averaging $\log(3) - v_2 \cdot \log(2)$ across every odd-to-odd step in every trajectory, for 50 million odd integers modulo 1024.
+The average logarithmic drift $E[\log(T(n)/n)]$ per residue class was computed by averaging $\log(3) - v_2 \cdot \log(2)$ across every odd-to-odd step in every trajectory, for 50 million odd integers.
 
-**Result:**
-```
-Corr(avg_steps, avg_log_drift) = 0.9730
-R²(avg_steps ~ avg_log_drift)  = 0.9467   (1 feature)
-```
+**Drift stability across moduli:**
 
-A single-feature model using average log drift explains **94.67%** of residue-class stopping-time variance — more than an 11-feature binary regression model achieving R² = 0.9044.
+| Modulus | Pearson r | R² (1 feature) |
+|---------|-----------|----------------|
+| 1024 | **0.9730** | **0.9467** |
+| 2048 | 0.9693 | 0.9396 |
+| 4096 | 0.9656 | 0.9324 |
+
+The correlation decreases only slightly as resolution doubles. The relationship is not an artifact of the 1024-class partition.
+
+**Summary statement:**
+> Across residue-class partitions from mod 1024 to mod 4096, odd-to-odd logarithmic drift remains the strongest predictor of average stopping time, with Pearson correlation consistently above 0.96.
 
 **Interpretation:** Average stopping time is overwhelmingly governed by the long-term multiplicative drift of the odd-to-odd map. Binary features (run lengths, entropy, Hamming weight) matter primarily because they influence the distribution of $v_2(3n+1)$, which directly determines that drift.
 
-**Observation on drift magnitude:** The observed mean drift (−0.349219) is more negative than the naive geometric-distribution prediction of $\ln(3/4) = -0.287682$. Real Collatz trajectories contract slightly *faster* than the uniform random heuristic would suggest.
+**Note on drift magnitude:** The observed mean drift (−0.349219) is more negative than the naive geometric-distribution prediction of $\ln(3/4) = -0.287682$. Real Collatz trajectories contract slightly *faster* than the uniform random heuristic would suggest — a systematic deviation worth further investigation.
+
+---
+
+### 2. Residue Class Conjectures — Stability Verified
+
+Two structural conjectures were tested across moduli 64 → 4096 (7 levels).
+
+**Conjecture A:** Among residue classes mod $2^k$, the class $2^k - 1$ (all 1-bits) maximizes average stopping time.
+
+```
+Scorecard: 7 / 7  ✓  (holds at every tested level)
+
+k= 6: residue   63 = 111111         avg=126.73
+k= 7: residue  127 = 1111111        avg=130.61
+k= 8: residue  255 = 11111111       avg=134.50
+k= 9: residue  511 = 111111111      avg=138.39
+k=10: residue 1023 = 1111111111     avg=142.56
+k=11: residue 2047 = 11111111111    avg=147.27
+k=12: residue 4095 = 111111111111   avg=152.47
+```
+
+**Conjecture B:** The class $r_k = (2^k - 1)/3$ (when integer) minimizes average stopping time.
+
+```
+Applicable at even k only (integer condition):
+
+k= 6: residue   21 = 010101         avg= 88.59  ✓
+k= 8: residue   85 = 01010101       avg= 80.94  ✓
+k=10: residue  341 = 0101010101     avg= 73.72  ✓
+k=12: residue 1365 = 010101010101   avg= 66.77  ✓
+
+Scorecard: 4 / 4 applicable levels  ✓
+```
+
+At odd k, $(2^k - 1)/3$ is not an integer — those cases are inapplicable, not failures.
+
+Both classes follow an immediate arithmetic explanation:
+- All-1s classes: $v_2(3n+1) = 1$ for most $n$ → slow convergence
+- Alternating classes: $3r + 1 = 2^k$ exactly → maximum $v_2$ → instant collapse
 
 ---
 

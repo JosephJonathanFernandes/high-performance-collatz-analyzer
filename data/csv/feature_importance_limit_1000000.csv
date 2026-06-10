@@ -1,0 +1,12 @@
+rank,feature,loo_delta_r2,permutation_delta_r2
+1,avg_odd_mult,0.537283,1.891320
+2,bit_entropy,0.004875,0.014511
+3,hamming_weight,0.001627,0.011316
+4,trailing_ones,0.001073,0.006879
+5,trailing_zeros_3n1,0.000610,0.001010
+6,alternation_score,0.000551,0.000478
+7,max_run_1s,0.000331,0.002658
+8,mod_27,0.000149,0.000070
+9,mod_3,0.000098,0.000397
+10,mod_9,0.000011,-0.000174
+11,avg_v2_placeholder,0.000000,0.000000
