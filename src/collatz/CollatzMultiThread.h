@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <windows.h>
+#include <algorithm>
 #include "CollatzResult.h"
 
 namespace collatz {
@@ -23,7 +24,7 @@ inline DWORD WINAPI CollatzThreadWorker(LPVOID lpParam) {
     ThreadData* data = (ThreadData*)lpParam;
     
     // Thread-local cache: cap size to prevent massive memory usage per thread
-    long long local_cache_limit = min(data->limit, 5000000LL); 
+    long long local_cache_limit = std::min(data->limit, 5000000LL);  
     std::vector<int> local_cache(local_cache_limit + 1, -1);
     local_cache[1] = 0;
 
