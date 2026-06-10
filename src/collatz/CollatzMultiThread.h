@@ -1,6 +1,9 @@
 #pragma once
 
 #include <vector>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 #include <algorithm>
 #include "CollatzResult.h"
@@ -24,7 +27,7 @@ inline DWORD WINAPI CollatzThreadWorker(LPVOID lpParam) {
     ThreadData* data = (ThreadData*)lpParam;
     
     // Thread-local cache: cap size to prevent massive memory usage per thread
-    long long local_cache_limit = std::min(data->limit, 5000000LL);  
+    long long local_cache_limit = (std::min)(data->limit, 5000000LL);  
     std::vector<int> local_cache(local_cache_limit + 1, -1);
     local_cache[1] = 0;
 
@@ -95,7 +98,7 @@ public:
     explicit CollatzMultiThread(int threads) : num_threads(threads) {}
 
     CollatzResult find_longest_chain(long long limit) {
-        if (limit < num_threads) num_threads = limit;
+        if (limit < num_threads) num_threads = static_cast<int>(limit);
         
         long long chunk_size = limit / num_threads;
         

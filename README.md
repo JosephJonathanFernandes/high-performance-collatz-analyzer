@@ -35,29 +35,28 @@ Benchmarks were run for a search limit of `50,000,000` on a 12-thread system.
 
 ## Build Instructions
 
-The project can be built using `g++` directly or via CMake.
+The project provides automated build and test scripts for Windows.
 
-### Using g++
-```bash
-g++ main.cpp -o collatz.exe -O3
+### Build the Project
+Run the build script from the root directory to compile both the main application and the test suite into the `build/` folder:
+```powershell
+.\scripts\build.bat
 ```
 
-### Using CMake
-```bash
-mkdir build
-cd build
-cmake ..
-cmake --build . --config Release
+### Run the Tests
+Verify the mathematical integrity of the engines:
+```powershell
+.\scripts\test.bat
 ```
 
 ## Usage
 
-Run the executable. A default limit of `1,000,000` is used if no arguments are provided.
+After building, the compiled executable will be available in the `build/` directory. You can run it with an optional search limit (defaults to `1,000,000` if no arguments are provided).
 
-```bash
+```powershell
 # Default (1,000,000 limit)
-./collatz.exe
+.\build\collatz.exe
 
 # Custom Limit (e.g. 50,000,000)
-./collatz.exe 50000000
+.\build\collatz.exe 50000000
 ```
