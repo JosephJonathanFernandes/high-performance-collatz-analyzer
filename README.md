@@ -136,12 +136,108 @@ Requires MinGW GCC on Windows. No external libraries.
 # Build all modules
 .\scripts\build.bat
 
-# Run the entire 50-million limit test suite (generates all CSVs)
+# Run all 7 core research paper modules at 50M
 .\build\collatz.exe all 50000000
 
 # Generate High-Resolution Visualizations
 python scripts\visualize.py
 ```
 
+---
+
+## All Research Modules
+
+| # | Command | Description |
+|---|---------|-------------|
+| 1 | `benchmark` | Extreme performance benchmark (multi-threaded) |
+| 2 | `tree <depth>` | Reverse Collatz Tree (BFS, depth up to 70) |
+| 3 | `growth <depth>` | Least-squares exponential fit of tree node counts |
+| 4 | `oddtoodd <limit>` | Compressed Odd-to-Odd Map analyzer |
+| 5 | `residue <limit>` | Residue class difficulty analyzer (mod 64) |
+| 6 | `binary <limit>` | 11-feature binary pattern correlation + OLS |
+| 7 | `near_cex <limit>` | Near-counterexample detector (highest peak/start ratio) |
+| 8 | `graph <limit>` | Sequence graph + cycle detection |
+| 9 | `stats <limit>` | v₂ probability distribution verifier |
+| 10 | `predict <limit>` | Per-number stopping time predictor (MAE/MSE/R²) |
+| 11 | `outliers <limit>` | Outlier discovery (numbers least explained by model) |
+| 12 | `residue_evolution <mod_start> <mod_end>` | Track hardest/easiest residue class as modulus grows |
+| 13 | `importance <limit>` | LOO + Permutation feature importance ranking |
+| 14 | `heatmap <limit>` | Difficulty heatmap + Graphviz DOT coloring |
+| 15 | `advanced_binary <limit>` | 19-feature advanced binary structure analysis |
+| 16 | `report` | Auto-generate `data/research_report.md` |
+| 17 | `outlier_trajectory <n>` | Analyze specific outlier trajectory and v₂ transitions |
+| 18 | `theorem_check <max_k>` | Analytically test symbolic algebraic families ($2^k-1$, etc.) |
+| 19 | `v2_markov <limit>` | **Global Markov transition matrix** $P(v_2 \mid v_2)$ |
+| 20 | `drift_law <limit>` | **Formal drift law regression** $S(n) \approx A + B \cdot (\log n / \|\mu_n\|)$ |
+| 21 | `drift_convergence <limit>` | **Drift convergence** $\mu_k \to \mu_\infty$ across moduli 1024→32768 |
+| ★ | `drift_spectrum <limit> <mod>` | **Headline: Odd-to-Odd Drift Spectrum** |
+| ★ | `k_convergence <file> <depth>` | Growth constant convergence trace |
+
+### Example Commands
+
+```powershell
+# === Core Research Paper Experiments ===
+
+# Headline: drift explains 94.67% of stopping-time variance
+.\build\collatz.exe drift_spectrum 50000000 1024
+
+# Unifying theorem: S(n) ≈ A + B·(log(n)/|μ|)  [R² = 0.9762]
+.\build\collatz.exe drift_law 50000000
+
+# Confirm mu_k converges to a stable limiting measure
+.\build\collatz.exe drift_convergence 50000000
+
+# Global Markov independence of v₂ transitions
+.\build\collatz.exe v2_markov 50000000
+
+# === Structural Conjectures ===
+
+# Hardest residue = 2^k - 1, easiest = (2^k - 1)/3
+.\build\collatz.exe residue_evolution 64 4096
+
+# Detailed difficulty heatmap
+.\build\collatz.exe heatmap 1000000
+
+# Feature importance: what binary features matter most?
+.\build\collatz.exe importance 1000000
+
+# === Outlier Studies ===
+
+# Analyze the famous hard number 837799
+.\build\collatz.exe outlier_trajectory 837799
+
+# Theorem check: symbolic families 2^k-1, alternating-bit, etc.
+.\build\collatz.exe theorem_check 60
+
+# === Infrastructure ===
+
+# Reverse tree BFS up to depth 30
+.\build\collatz.exe tree 30
+
+# Performance benchmark
+.\build\collatz.exe benchmark
+```
+
+---
+
+## Key Numerical Results at 50,000,000 Limit
+
+| Experiment | Result |
+|---|---|
+| **Drift Law $R^2$** | **0.9762** (Pearson $r = 0.9880$) |
+| **Drift Spectrum $r$ (mod 1024)** | **0.9730** ($R^2 = 0.9467$) |
+| **Drift Spectrum $r$ (mod 2048)** | **0.9693** ($R^2 = 0.9396$) |
+| **Drift Spectrum $r$ (mod 4096)** | **0.9656** ($R^2 = 0.9324$) |
+| Global Markov $P(v_2=1 \mid v_2=1)$ | **49.99%** (theoretically 50%) |
+| Observed mean log drift | −0.349219 |
+| Theoretical $\ln(3/4)$ | −0.287682 |
+| Hardest residue conjecture | **7/7 levels** ✓ |
+| Easiest residue conjecture | **4/4 applicable levels** ✓ |
+| Drift convergence ($\mu_k \to \mu_\infty$) | **Confirmed** |
+| Reverse tree growth constant | $k = 1.263729$ ($R^2 = 1.000000$) |
+
+---
+
 ### Scientific Caveats
 These findings are empirical and do not constitute a formal mathematical proof of the Collatz conjecture. The results characterize the **average structural behavior** of the Collatz map at massive scale. Proving that *every* individual integer eventually reaches 1 requires fundamentally different mathematical tools.
+
