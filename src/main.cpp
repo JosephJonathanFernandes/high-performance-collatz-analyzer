@@ -35,6 +35,7 @@
 #include "research/TheoremCheckAnalyzer.hpp"
 #include "research/V2MarkovAnalyzer.hpp"
 #include "research/DriftLawAnalyzer.hpp"
+#include "research/DriftConvergenceAnalyzer.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -69,6 +70,7 @@ void print_help() {
     cout << "  theorem_check      <max_k>               Analytically test symbolic families\n";
     cout << "  v2_markov          <limit>               Global Markov transition matrix P(v2|v2)\n";
     cout << "  drift_law          <limit>               Test S(n) ≈ A + B*(log(n)/|mu_n|)\n";
+    cout << "  drift_convergence  <limit>               Test if mu_k -> mu_infty as k increases\n";
     cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
@@ -181,13 +183,18 @@ int main(int argc, char* argv[]) {
     else if (module == "drift_law") {
         DriftLawAnalyzer::analyze(limit);
     }
+    else if (module == "drift_convergence") {
+        DriftConvergenceAnalyzer::analyze(limit);
+    }
     else if (module == "all") {
-        ReverseTreeExplorer::analyze(25); // Hardcoded depth for 'all' to prevent lockups
-        OddToOddAnalyzer::analyze(limit);
+        std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";
+        DriftLawAnalyzer::analyze(limit);
+        OddToOddDriftSpectrum::analyze(limit, 1024);
+        DriftConvergenceAnalyzer::analyze(limit);
+        V2MarkovAnalyzer::analyze(limit);
         ResidueAnalyzer::analyze(limit, 64);
-        NearCounterexampleDetector::analyze(limit, 10);
-        GraphAnalyzer::analyze(limit);
-        StatisticalAnalyzer::analyze(limit);
+        ResidueEvolutionTracker::analyze(limit, 64, 4096);
+        ReverseTreeExplorer::analyze(30);
     } 
     else {
         print_help();
