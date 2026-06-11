@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
         DriftConvergenceAnalyzer::analyze(limit);
         V2MarkovAnalyzer::analyze(limit);
         ResidueAnalyzer::analyze(limit, 64);
-        ResidueEvolutionTracker::analyze(limit, 64, 4096);
+        ResidueEvolutionAnalyzer::analyze(limit, 64, 4096);
         ReverseTreeExplorer::analyze(30);
     } 
     else {
