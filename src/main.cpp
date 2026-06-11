@@ -3,6 +3,9 @@
 #include <chrono>
 #include <iomanip>
 #include <stdexcept>
+#ifndef NOMINMAX
+#define NOMINMAX  // Prevent windows.h from defining min/max macros
+#endif
 #include <windows.h>
 
 // Core Engines

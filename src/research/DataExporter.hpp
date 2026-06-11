@@ -3,6 +3,9 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 
 namespace collatz {

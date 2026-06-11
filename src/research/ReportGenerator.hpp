@@ -8,6 +8,9 @@
 #include <algorithm>
 #include <iomanip>
 #include <chrono>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
 #include "DataExporter.hpp"
 
