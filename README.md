@@ -2,6 +2,8 @@
 
 A multi-threaded C++ research platform (**21 modules**) for investigating the arithmetic and geometric structure of the [Collatz conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture), validated across **50,000,000 integers**.
 
+> 📖 **New to this?** Read [EXPLAINED.md](EXPLAINED.md) — a plain-English, Feynman-style walkthrough of every finding.
+
 ## Abstract
 
 This project began as a high-performance benchmark for finding long Collatz sequences but evolved into a fully-fledged computational mathematics platform. By systematically investigating the structural arithmetic and geometric properties of Collatz trajectories, this toolkit has computationally validated several major quantitative properties of the Collatz map.
