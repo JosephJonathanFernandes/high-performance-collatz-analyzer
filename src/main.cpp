@@ -31,6 +31,10 @@
 #include "research/ReportGenerator.hpp"
 #include "research/OddToOddDriftSpectrum.hpp"
 #include "research/GrowthConvergenceAnalyzer.hpp"
+#include "research/OutlierTrajectoryAnalyzer.hpp"
+#include "research/TheoremCheckAnalyzer.hpp"
+#include "research/V2MarkovAnalyzer.hpp"
+#include "research/DriftLawAnalyzer.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -61,6 +65,10 @@ void print_help() {
     cout << "  advanced_binary    <limit> <modulo>      19-feature advanced binary analysis\n";
     cout << "  report                                   Auto-generate research_report.md\n";
     cout << "  drift_spectrum     <limit> <modulo>      E[log(T(n)/n)] drift spectrum analysis\n";
+    cout << "  outlier_trajectory <number>              Analyze trajectory and v2 transitions\n";
+    cout << "  theorem_check      <max_k>               Analytically test symbolic families\n";
+    cout << "  v2_markov          <limit>               Global Markov transition matrix P(v2|v2)\n";
+    cout << "  drift_law          <limit>               Test S(n) ≈ A + B*(log(n)/|mu_n|)\n";
     cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
@@ -159,6 +167,19 @@ int main(int argc, char* argv[]) {
         string file = (argc > 2) ? argv[2] : "data/csv/reverse_tree_100.csv";
         int start_depth = (argc > 3) ? stoi(argv[3]) : 30;
         GrowthConvergenceAnalyzer::analyze(file, start_depth);
+    }
+    else if (module == "outlier_trajectory") {
+        OutlierTrajectoryAnalyzer::analyze(limit);
+    }
+    else if (module == "theorem_check") {
+        int max_k = (argc > 2) ? stoi(argv[2]) : 60;
+        TheoremCheckAnalyzer::analyze(max_k);
+    }
+    else if (module == "v2_markov") {
+        V2MarkovAnalyzer::analyze(limit);
+    }
+    else if (module == "drift_law") {
+        DriftLawAnalyzer::analyze(limit);
     }
     else if (module == "all") {
         ReverseTreeExplorer::analyze(25); // Hardcoded depth for 'all' to prevent lockups
