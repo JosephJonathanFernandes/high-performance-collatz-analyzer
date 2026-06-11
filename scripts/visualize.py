@@ -134,6 +134,121 @@ def visualize_residue_evolution():
     plt.close()
     print("Saved data/residue_evolution.png")
 
+def visualize_drift_law():
+    files = glob.glob('data/csv/drift_law_limit_*.csv')
+    if not files:
+        print("No drift law data found.")
+        return
+    
+    file = max(files, key=os.path.getctime)
+    df = pd.read_csv(file)
+    
+    # Subsample if too large for scatter
+    if len(df) > 10000:
+        df_sample = df.sample(10000, random_state=42)
+    else:
+        df_sample = df
+        
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(
+        data=df_sample, 
+        x='predictor_X', 
+        y='actual_S', 
+        alpha=0.3, 
+        color='#9467bd',
+        edgecolor='none',
+        s=15,
+        label='Actual S(n)'
+    )
+    
+    # Sort for line plot
+    df_line = df.sort_values('predictor_X')
+    plt.plot(df_line['predictor_X'], df_line['predicted_S'], color='#ff7f0e', linewidth=2, label='Regression Fit')
+    
+    plt.title('Stopping Time vs Drift Law Predictor (log(n) / |μ|)', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Predictor X = log(n) / |μ|', fontsize=12)
+    plt.ylabel('Total Stopping Time S(n)', fontsize=12)
+    plt.legend()
+    
+    plt.tight_layout()
+    plt.savefig('data/drift_law.png', bbox_inches='tight')
+    plt.close()
+    print("Saved data/drift_law.png")
+
+def visualize_markov():
+    files = glob.glob('data/csv/global_v2_transitions_limit_*.csv')
+    if not files:
+        print("No markov transition data found.")
+        return
+        
+    file = max(files, key=os.path.getctime)
+    df = pd.read_csv(file)
+    
+    # Pivot to matrix
+    matrix = df.pivot(index='v2_current', columns='v2_next', values='probability_pct')
+    
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        matrix, 
+        annot=True, 
+        fmt=".1f", 
+        cmap="Blues", 
+        cbar_kws={'label': 'Transition Probability (%)'}
+    )
+    
+    plt.title('Global v₂ Markov Transition Matrix P(next | current)', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Next v₂ State', fontsize=12)
+    plt.ylabel('Current v₂ State', fontsize=12)
+    
+    plt.tight_layout()
+    plt.savefig('data/markov_matrix.png', bbox_inches='tight')
+    plt.close()
+    print("Saved data/markov_matrix.png")
+
+def visualize_drift_convergence():
+    files = glob.glob('data/csv/drift_convergence_limit_*.csv')
+    if not files:
+        print("No drift convergence data found.")
+        return
+        
+    file = max(files, key=os.path.getctime)
+    df = pd.read_csv(file)
+    
+    plt.figure(figsize=(10, 6))
+    
+    # Plot mu_k with error bars (standard deviation)
+    # df['variance'] has the variance, std dev is sqrt(variance)
+    df['std_dev'] = np.sqrt(df['variance'])
+    
+    plt.errorbar(
+        df['k'], 
+        df['mu_k'], 
+        yerr=df['std_dev'], 
+        fmt='-o', 
+        color='#2ca02c', 
+        linewidth=2.5, 
+        markersize=8,
+        capsize=5,
+        capthick=2,
+        label=r'$\mu_k$ (Class Average Drift)'
+    )
+    
+    # Add a horizontal line for the final converged value
+    final_mu = df['mu_k'].iloc[-1]
+    plt.axhline(y=final_mu, color='#d62728', linestyle='--', linewidth=2, label=rf'Limiting Measure $\mu_\infty \approx {final_mu:.6f}$')
+    
+    plt.title(r'Convergence of Mean Drift $\mu_k \to \mu_\infty$', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel(r'Modulus Power k (Residue Classes $mod\ 2^k$)', fontsize=12)
+    plt.ylabel(r'Average Logarithmic Drift $\mu_k$', fontsize=12)
+    plt.xticks(df['k'])
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.7)
+    
+    plt.tight_layout()
+    plt.savefig('data/drift_convergence.png', bbox_inches='tight')
+    plt.close()
+    print("Saved data/drift_convergence.png")
+
 if __name__ == '__main__':
     if not os.path.exists('data'):
         os.makedirs('data')
@@ -142,4 +257,7 @@ if __name__ == '__main__':
     visualize_drift_scatter()
     visualize_heatmap()
     visualize_residue_evolution()
+    visualize_drift_law()
+    visualize_markov()
+    visualize_drift_convergence()
     print("Done!")

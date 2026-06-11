@@ -151,10 +151,11 @@ public:
 
         std::cout << "  Simulation time : " << sim_ms << " ms\n";
 
-        // Export to CSV
+        // Export to CSV (subsampled to prevent out-of-memory on huge limits)
         std::stringstream csv;
         csv << "n,mu_n,predictor_X,actual_S,predicted_S,error\n";
-        for (size_t i = 0; i < N; ++i) {
+        unsigned long long step = (N > 100000) ? (N / 100000) : 1;
+        for (size_t i = 0; i < N; i += step) {
             double predicted = A + B * X[i];
             csv << (i + 2) << "," << mus[i] << "," << X[i] << "," << Y[i] << "," << predicted << "," << (predicted - Y[i]) << "\n";
         }

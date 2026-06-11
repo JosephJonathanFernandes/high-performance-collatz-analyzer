@@ -32,21 +32,23 @@ public:
 
         auto t0 = std::chrono::high_resolution_clock::now();
 
-        std::unordered_set<unsigned long long> visited;
         std::map<int, std::map<int, unsigned long long>> transitions;
         std::map<int, unsigned long long> state_counts;
+        unsigned long long unique_paths_tracked = 0;
 
         for (unsigned long long i = 1; i <= limit; i += 2) {
             unsigned long long current = i;
             
             // To record a transition, we need the previous v2
             int prev_v2 = -1;
+            unique_paths_tracked++;
 
             while (current != 1) {
-                if (visited.count(current)) {
-                    break; // Path merges with already fully-explored path
+                // If we drop below our starting odd number, this path has already been 
+                // fully processed in a previous iteration! Zero memory caching.
+                if (current < i && current % 2 == 1) {
+                    break; 
                 }
-                visited.insert(current);
 
                 // Ensure we are on an odd number
                 if (current % 2 == 1) {
@@ -109,7 +111,7 @@ public:
         std::cout << "  is ~0.94 rather than 1.00.\n\n";
 
         std::cout << "  Simulation time : " << sim_ms << " ms\n";
-        std::cout << "  Unique paths tracked: " << visited.size() << "\n";
+        std::cout << "  Unique paths tracked: " << unique_paths_tracked << "\n";
 
         DataExporter::export_csv(
             "global_v2_transitions_limit_" + std::to_string(limit) + ".csv",
