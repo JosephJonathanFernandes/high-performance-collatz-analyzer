@@ -41,30 +41,35 @@ Metrics:
   MAE           : 6.70 steps
 ```
 
-**Interpretation:** Stopping time is essentially determined by the logarithmic size of the number divided by its trajectory's average drift. The missing 2.38% of variance is the natural within-class statistical wobble.
+The remaining 2.38% likely reflects trajectory-specific effects not captured by the drift model — possibly the initial transient before the trajectory mixes, or higher-order correlations in the v₂ process.
 
 ---
 
 ## 2. ★ Drift Convergence — Universal Constant μ∞
 
-**Hypothesis:** The class-average drift μₖ converges as modulus 2^k increases.
+**Hypothesis:** The class-average drift μₖ converges to a stable limit as modulus 2^k increases.
 
-```
-Modulus   k    μₖ              Variance σ²
--------------------------------------------------
-1024      10   -0.34921926     0.00323209
-2048      11   -0.34921926     0.00361809
-4096      12   -0.34921925     0.00401005
-8192      13   -0.34921925     0.00440896
-16384     14   -0.34921925     0.00481504
-32768     15   -0.34921922     0.00523247
+**Results (50M and 100M integers, 32,768 bins):**
+| Limit | Modulus | k | μₖ | Variance σ² |
+|-------|---------|---|-----|-------------|
+| 50M | 1024 | 10 | **−0.34921926** | 0.00323209 |
+| 50M | 2048 | 11 | −0.34921926 | 0.00361809 |
+| 50M | 4096 | 12 | −0.34921925 | 0.00401005 |
+| 50M | 8192 | 13 | −0.34921925 | 0.00440896 |
+| 50M | 16384 | 14 | −0.34921925 | 0.00481504 |
+| 50M | 32768 | 15 | −0.34921922 | 0.00523247 |
+| **100M** | 1024 | 10 | **−0.34622476** | 0.00284987 |
+| **100M** | 2048 | 11 | −0.34622476 | 0.00318678 |
+| **100M** | 4096 | 12 | −0.34622475 | 0.00352797 |
+| **100M** | 8192 | 13 | −0.34622476 | 0.00387513 |
+| **100M** | 16384 | 14 | −0.34622473 | 0.00422723 |
+| **100M** | 32768 | 15 | −0.34622471 | 0.00458547 |
 
 Variation across all 5 doublings: < 4 × 10⁻⁸
-```
 
-**Interpretation:** The Collatz map approaches an invariant probabilistic distribution. The universal drift constant μ∞ ≈ −0.34921925 is the cleanest single empirical result in this repository.
+This provides **strong computational evidence** that macroscopic Collatz behaviour approaches a stable limiting distribution. Within any fixed n-limit, the measured μₖ is extremely stable across residue classes (variation < 4×10⁻⁸). However, the value itself shifts from −0.34921925 at 50M to −0.34622476 at 100M, confirming a finite-size effect that has not yet converged.
 
-Note: Observed drift (−0.34921925) is more negative than the naive geometric expectation ln(3/4) ≈ −0.287682. Real trajectories contract faster than the uniform random model predicts — a systematic deviation from the simplest heuristic.
+Note: Observed drift (−0.34921925 at 50M, −0.34622476 at 100M) is more negative than the naive geometric expectation ln(3/4) ≈ −0.287682, meaning real trajectories contract faster than the simplest random-walk heuristic predicts. Importantly, the constant itself shifts between 50M and 100M by ~0.003, suggesting a **finite-size correction**: the value of μ∞ converges across residue classes at any fixed limit (variation < 4×10⁻⁸) but is not yet fully stabilised as n → ∞. This is an open empirical question.
 
 ---
 
@@ -80,7 +85,9 @@ P(v₂=1 | v₂=2)        49.98%     50.00%
 P(v₂=1 | v₂=3)        50.00%     50.00%
 ```
 
-The global matrix perfectly matches the independent (0.5)^k model. Outlier n = 837,799 shows P(v₂=1 | v₂=1) = 62.3% locally — a rare tail event, not a different governing law.
+The global matrix is consistent with the independent (0.5)^k model. Outlier n = 837,799 shows P(v₂=1 | v₂=1) = 62.3% locally — a rare tail event, not a different governing law.
+
+This provides **strong computational evidence** for memorylessness of the global v₂ process. It is not a formal proof of independence.
 
 ---
 
@@ -128,9 +135,9 @@ Conjecture A (2^k-1 is hardest):  7/7 ✓
 Conjecture B ((2^k-1)/3 easiest): 4/4 applicable levels ✓
 ```
 
-Both conjectures are algebraically provable:
-- **B:** 3·(2^k-1)/3 + 1 = 2^k → v₂ = k always (single-step collapse)
-- **A:** n ≡ 2^k-1 → 3n+1 ≡ 2 (mod 4) → v₂ = 1 always (minimal contraction)
+The extremal behaviour of both families follows directly from simple algebraic identities:
+- **B:** 3·(2^k-1)/3 + 1 = 2^k → v₂ = k always (single-step collapse). This is a clean algebraic fact.
+- **A:** n ≡ 2^k-1 → 3n+1 ≡ 2 (mod 4) → v₂ = 1 always. This proves these numbers *begin* with minimal v₂, but proving they are the hardest **among all residue classes** is a strictly stronger claim that is not yet established.
 
 ---
 
@@ -175,7 +182,7 @@ All top outliers show local P(v₂=1 | v₂=1) substantially above 50% — tempo
 |---|---|---|
 | `drift_law` | ★★★★★ Capstone — R² = 0.9762 | Central |
 | `drift_convergence` | ★★★★★ Universal constant μ∞ | Central |
-| `v2_markov` | ★★★★☆ Global independence proof | Central |
+| `v2_markov` | ★★★★☆ Global independence **evidence** | Central |
 | `drift_spectrum` | ★★★★☆ r > 0.97 headline result | Central |
 | `residue_evolution` | ★★★★☆ 7/7 conjecture verification | Central |
 | `theorem_check` | ★★★★☆ Algebraic proofs | Central |
