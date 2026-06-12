@@ -95,29 +95,29 @@ public:
                 class_counts[r_mod] += count_bin[r];
             }
 
-            // Compute class averages and macroscopic mean
-            double sum_class_averages = 0.0;
-            std::vector<double> class_averages(mod, 0.0);
-            int valid_classes = 0;
+            // Population-weighted mean: total drift sum / total number count
+            // (NOT unweighted mean of class averages, which biases toward small classes)
+            double total_sum = 0.0;
+            unsigned long long total_count = 0;
+            for (int r = 0; r < mod; ++r) {
+                total_sum += class_sums[r];
+                total_count += class_counts[r];
+            }
+            double mu_k = (total_count > 0) ? (total_sum / total_count) : 0.0;
 
+
+
+            // Variance of class averages around the population-weighted mean
+            double variance = 0.0;
+            int valid_classes = 0;
             for (int r = 0; r < mod; ++r) {
                 if (class_counts[r] > 0) {
-                    class_averages[r] = class_sums[r] / class_counts[r];
-                    sum_class_averages += class_averages[r];
+                    double class_avg = class_sums[r] / class_counts[r];
+                    variance += (class_avg - mu_k) * (class_avg - mu_k);
                     valid_classes++;
                 }
             }
-
-            double mu_k = sum_class_averages / valid_classes;
-
-            // Compute variance
-            double variance = 0.0;
-            for (int r = 0; r < mod; ++r) {
-                if (class_counts[r] > 0) {
-                    variance += (class_averages[r] - mu_k) * (class_averages[r] - mu_k);
-                }
-            }
-            variance /= valid_classes;
+            variance /= (valid_classes > 0 ? valid_classes : 1);
 
             int k = (int)std::log2(mod);
             std::cout << std::left << std::setw(10) << mod 
@@ -131,8 +131,10 @@ public:
         std::cout << "\n--- Scientific Interpretation ---\n";
         std::cout << "  If mu_k is practically identical across 1024 -> 32768,\n";
         std::cout << "  the state space converges to a stable limiting measure mu_infty.\n";
-        std::cout << "  This formally proves that macroscopic Collatz behavior\n";
-        std::cout << "  approaches an invariant probabilistic distribution.\n\n";
+        std::cout << "  This provides strong computational evidence that macroscopic Collatz\n";
+        std::cout << "  behaviour approaches a stable limiting distribution.\n";
+        std::cout << "  NOTE: mu_k is now computed as the population-weighted mean\n";
+        std::cout << "  (total drift / total numbers), not as mean of class averages.\n\n";
 
         DataExporter::export_csv(
             "drift_convergence_limit_" + std::to_string(limit) + ".csv",
