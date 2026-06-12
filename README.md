@@ -119,6 +119,27 @@ For alternating-bit residues, $3r + 1 = 2^k$ exactly → maximum $v_2$ → insta
 
 ---
 
+### Finding 5b · Symbolic Analytic Proof (Theorem Checker)
+
+**These two conjectures are not just empirically true — they are provable in algebra.**
+
+**Proof of Conjecture B** (easiest class, 2 lines):
+> Let $n = (2^k - 1)/3$. Then $3n + 1 = 3 \cdot \frac{2^k-1}{3} + 1 = (2^k - 1) + 1 = 2^k$.  
+> Therefore $v_2(3n+1) = k$ — the maximum possible. The number collapses in a single odd step.
+
+**Proof of Conjecture A** (hardest class):
+> Let $n \equiv 2^k - 1 \pmod{2^k}$, so all $k$ trailing bits are 1.  
+> Then $3n + 1 \equiv 3(2^k-1)+1 = 3 \cdot 2^k - 2 = 2(3 \cdot 2^{k-1} - 1) \pmod{2^{k+1}}$.  
+> Since $3 \cdot 2^{k-1} - 1$ is odd, we get $v_2(3n+1) = 1$ — the minimum possible. Maximum expansion per step.
+
+**Results from `theorem_check` at $k = 1 \ldots 20$:**
+| Family | Init $v_2$ | Avg $v_2$ | Behavior |
+|---|---|---|---|
+| $2^k - 1$ | **always 1** | 1.7–2.1 | Slowest convergence, highest drift |
+| $(2^k-1)/3$ | **always $k$** | exactly $k$ | Single-step collapse |
+| $2^k + 1$ | always 2 | 1.75–3.0 | Mixed behavior |
+| $(2^k+1)/3$ | always 1 | 1.75–2.5 | Near-hard behavior |
+
 ### Finding 6 · Binary Difficulty Heatmap
 
 **Hypothesis:** Difficulty concentrates in localized binary regions tied to 1-bit density.
@@ -126,14 +147,37 @@ For alternating-bit residues, $3r + 1 = 2^k$ exactly → maximum $v_2$ → insta
 **Results (1M integers, 64×64 modulus grid):**
 - The bottom-right corner (highest 1-bit density residues) clusters the extreme stopping times.
 - 11-feature binary OLS: **Joint $R^2 = 0.9260$**
+- 19-feature advanced binary OLS (`advanced_binary`): captures run-length structure, entropy, and ternary residues across 256 modular classes
 - Top binary correlates with `avg_steps`:
-  - `avg_odd_mult`: Pearson $r = -0.52$ (dominates all others)
+  - `avg_odd_mult`: Pearson $r = -0.52$ (dominates all others, $\Delta R^2 = 0.537$ in LOO test)
   - `longest_run_of_1s`: $r = +0.47$
   - `hamming_weight`: $r = +0.40$
+  - `bit_entropy`: $\Delta R^2 = 0.005$ (all remaining features combined < 0.01)
 
 ![Difficulty Heatmap](data/heatmap.png)
 
 ---
+
+### Finding 8 · Near-Counterexample Detector
+
+**What it does:** Finds numbers whose trajectory peaks at the largest multiple of their starting value — i.e., numbers that "almost escape" to infinity before crashing.
+
+**Results at 50,000,000:**
+| Rank | $n$ | $R(n) = \text{peak}/n$ | Peak Value | Steps |
+|------|-----|----------------------|------------|-------|
+| 1 | 19,638,399 | **15,596,837×** | 306,296,925,203,752 | 606 |
+| 2 | 38,595,583 | 12,297,720× | 474,637,698,851,092 | 483 |
+| 3 | 29,457,599 | 10,397,891× | 306,296,925,203,752 | 604 |
+
+None of these escape. Every single one eventually reaches 1. But they demonstrate just how far a trajectory can stray before converging — peak values exceeding **300 trillion** from a starting point under 50 million.
+
+---
+
+### Finding 9 · Graph Cycle Detection
+
+**Hypothesis:** The Collatz directed graph contains no non-trivial cycles other than {4→2→1}.
+
+**Results:** Over all unique paths from 3 to 50,000,000, a full DFS found **zero non-trivial cycles**. Every path eventually merges into the 4→2→1 trivial cycle. This is consistent with the conjecture but is not a proof for numbers beyond the tested range.
 
 ### Finding 7 · Stable Exponential Reverse Tree Growth
 
