@@ -1,0 +1,61 @@
+Pick any positive whole number.
+
+If it is even, divide it by 2.
+
+If it is odd, multiply it by 3 and add 1.
+
+Then repeat.
+
+For example:
+
+10 → 5 → 16 → 8 → 4 → 2 → 1
+
+Try another number.
+
+It also reaches 1.
+
+Try millions of numbers.
+
+They also reach 1.
+
+Now comes the strange part.
+
+Nobody has ever proved that this always happens.
+
+This is the Collatz Conjecture, one of the most famous unsolved problems in mathematics. Proposed in 1937, it remains unproved despite decades of effort.
+
+Curious about why such a simple problem remains unsolved, I started an independent computational mathematics research project and built a high-performance Collatz research platform in C++. The project has grown into 21 research modules, with experiments run on up to 50 million numbers.
+
+Some findings so far:
+
+• Stopping times are highly predictable. A drift-based model explains 97.62% of the variance in stopping times across 50 million integers (R² = 0.9762). One formula. One idea. Most of the mystery explained.
+
+• Binary structure matters. Numbers ending in long runs of 1-bits consistently behave as the hardest residue classes, while alternating-bit patterns behave as the easiest. This held across every modulus tested from modulo 64 up to modulo 4096, verified at 7 successive levels.
+
+• This isn't just observed — part of it is provable. For alternating-bit numbers like 21, 85, 341, applying the rule once produces a perfect power of 2, so the sequence collapses in a single odd step. The algebra reduces to two lines.
+
+• The odd-to-odd dynamics are remarkably regular. Average logarithmic drift correlates above 0.97 with stopping-time difficulty across 1024 residue classes.
+
+• The drift converges to a universal constant. As residue classes become finer (modulo 1024 → 32768), the average contraction rate stabilises at μ∞ ≈ −0.34921925, with total variation under 4 × 10⁻⁸ across five successive doublings of state space.
+
+• The global transition statistics are almost perfectly memoryless. Large-scale Markov analysis across 50 million numbers shows P(v₂ = 1 | v₂ = 1) = 49.99%, within 0.01% of the theoretical prediction.
+
+• Outliers reveal where the difficulty lives. Famous long trajectories such as 837,799 exhibit temporary persistence in low-division states, explaining unusually long paths — they are rare tail events, not exceptions to a different law.
+
+• The reverse Collatz tree grows with remarkable consistency. Exploring backward from 1 to depth 70 produced over 40 million unique nodes, with an exponential growth constant of k ≈ 1.2637 and a least-squares fit of R² = 1.000000 over 50 depth levels.
+
+None of this proves the Collatz Conjecture.
+
+A proof would require fundamentally new mathematics.
+
+But these experiments suggest that beneath the apparent chaos lies measurable and highly structured behaviour. The same statistical patterns emerge from multiple independent analyses.
+
+The mystery remains.
+
+And that's exactly what makes it worth studying.
+
+GitHub repository in the comments.
+
+Sometimes the most interesting questions begin with rules simple enough to explain to a child — and then refuse to give up their secrets for nearly a century.
+
+#Collatz #Mathematics #NumberTheory #CPlusPlus #ComputerScience #Research #BuildingInPublic #OpenSource #IndependentResearch #GECGoa
