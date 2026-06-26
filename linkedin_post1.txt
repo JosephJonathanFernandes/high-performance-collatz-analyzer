@@ -1,0 +1,33 @@
+A few days ago I shared a Collatz research platform I've been building.
+
+Quick update — but first, the idea in one line:
+
+Take any number. If it's even, halve it. If it's odd, triple it and add 1. Repeat. Every number tested eventually reaches 1. Nobody knows why.
+
+---
+
+I was measuring the "average speed" at which numbers fall toward 1.
+
+Zoom out across enough numbers and the speed starts looking stable — almost like a constant you could name.
+
+I thought I'd found it.
+
+Then I ran more numbers:
+
+1M → 10M → 50M → 100M → 500M → 1B → 3B
+
+The speed changed. Slightly, but consistently.
+
+So the constant wasn't real — at least not in the way I first thought. Small-number effects were pulling the average in a direction that larger datasets gradually corrected.
+
+Here's the interesting part: once I understood the distortion, I could model it.
+
+And that model — built entirely from earlier runs — successfully predicted new experiments up to 3 billion numbers with extremely small error.
+
+No proof of the conjecture. No magic breakthrough.
+
+But sometimes that's what research looks like: you think you found something, the data disagrees, and if you listen carefully enough, the disagreement itself becomes the finding.
+
+Platform now has 21 modules. GitHub in comments.
+
+#Collatz #Mathematics #NumberTheory #CPlusPlus #Research
