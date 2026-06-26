@@ -69,13 +69,68 @@ $$S(n) \approx A + B \cdot \frac{\log n}{|\mu_n|}$$
 | 32768 | 15 | −0.34921922 | 0.00523247 |
 
 Total variation across 5 successive doublings of state space: **< 4 × 10⁻⁸**.
-The universal drift constant is $\mu_\infty \approx -0.34921925$.
+Observed drift converges rapidly across residue scales, but its asymptotic limiting value is still under investigation.
 
 Note: this is more negative than the naive geometric expectation $\ln(3/4) \approx -0.287682$, meaning real trajectories contract *faster* than the simplest random-walk heuristic predicts.
 
 As modulus deepens from 1024→32768, average drift **strictly flattens**. This establishes a **stable limiting measure** on the 2-adic residue space.
 
 ![Drift Convergence](data/drift_convergence.png)
+
+---
+
+## Update — Drift Convergence Scaling (June 2026)
+
+Large-scale drift convergence experiments were extended from 1M to 2B integers.
+
+Observed values:
+
+| Limit N | μ(N) |
+|----------|------------|
+| 1M | -0.37347939 |
+| 10M | -0.35742381 |
+| 50M | -0.34921927 |
+| 100M | -0.34622476 |
+| 200M | -0.34349861 |
+| 300M | -0.34202109 |
+| 500M | -0.34033701 |
+| 1B | -0.33813764 |
+| 1.5B | -0.33693424 |
+| 2B | -0.33611781 |
+
+Key observations:
+
+- For a fixed N, μₖ is essentially identical across moduli 1024 → 32768.
+- Variation across moduli remains below ~5×10⁻⁸.
+- The previously suspected universal constant μ∞ ≈ -0.349219 was incorrect.
+- μ(N) shifts systematically as N increases.
+- Evidence now suggests that finite-size effects dominate earlier estimates.
+
+Empirical finite-size model:
+
+μ(N) ≈ a + b/log(N) + c/(log(N))²
+
+Fitted coefficients:
+
+a = -0.290328  
+b = -0.672586  
+c = -6.580958  
+
+Fit quality:
+
+R² = 0.999994  
+Mean absolute error = 6.35×10⁻⁵  
+Maximum absolute error = 2.78×10⁻⁴
+
+Interpretation:
+
+The drift appears to approach a limiting value close to:
+
+ln(3/4) ≈ -0.287682
+
+with finite-size corrections that decay as inverse powers of log(N).
+
+This remains an empirical observation only; no asymptotic proof is known.
 
 ---
 
