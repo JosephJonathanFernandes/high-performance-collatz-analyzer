@@ -39,6 +39,7 @@
 #include "research/V2MarkovAnalyzer.hpp"
 #include "research/DriftLawAnalyzer.hpp"
 #include "research/DriftConvergenceAnalyzer.hpp"
+#include "research/FiniteSizeFitAnalyzer.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -74,6 +75,7 @@ void print_help() {
     cout << "  v2_markov          <limit>               Global Markov transition matrix P(v2|v2)\n";
     cout << "  drift_law          <limit>               Test S(n) ≈ A + B*(log(n)/|mu_n|)\n";
     cout << "  drift_convergence  <limit>               Test if mu_k -> mu_infty as k increases\n";
+    cout << "  finite_size_fit    <file.csv>            LOOCV fit mu(N) = a + b/logN + c/logN^2\n";
     cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
@@ -93,7 +95,7 @@ int main(int argc, char* argv[]) {
     string module = argv[1];
     unsigned long long limit = 1000000;
 
-    if (argc > 2 && module != "report" && module != "k_convergence") {
+    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit") {
         try {
             limit = stoull(argv[2]);
         } catch (...) {
@@ -188,6 +190,10 @@ int main(int argc, char* argv[]) {
     }
     else if (module == "drift_convergence") {
         DriftConvergenceAnalyzer::analyze(limit);
+    }
+    else if (module == "finite_size_fit") {
+        string file = (argc > 2) ? argv[2] : "data/csv/drift_convergence_summary.csv";
+        FiniteSizeFitAnalyzer::analyze(file);
     }
     else if (module == "all") {
         std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";
