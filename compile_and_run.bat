@@ -28,6 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Asymptotic Law Explorer...
+echo Build Successful! Running Oscillation Significance Analyzer...
 echo ========================================================
-.\build\collatz.exe asymptotic_law
+.\build\collatz.exe oscillation_test

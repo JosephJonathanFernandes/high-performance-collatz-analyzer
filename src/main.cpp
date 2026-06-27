@@ -42,6 +42,8 @@
 #include "research/FiniteSizeFitAnalyzer.hpp"
 #include "research/PredictionAuditor.hpp"
 #include "research/AsymptoticLawExplorer.hpp"
+#include "research/ResidualStructureAnalyzer.hpp"
+#include "research/OscillationSignificanceAnalyzer.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -98,7 +100,7 @@ int main(int argc, char* argv[]) {
     string module = argv[1];
     unsigned long long limit = 1000000;
 
-    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit" && module != "audit" && module != "asymptotic_law") {
+    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit" && module != "audit" && module != "asymptotic_law" && module != "residuals" && module != "oscillation_test") {
         try {
             limit = stoull(argv[2]);
         } catch (...) {
@@ -231,6 +233,14 @@ int main(int argc, char* argv[]) {
     else if (module == "asymptotic_law") {
         string file = (argc > 2) ? argv[2] : "data/csv/drift_scaling.csv";
         AsymptoticLawExplorer::analyze(file);
+    }
+    else if (module == "residuals") {
+        string file = (argc > 2) ? argv[2] : "data/csv/drift_scaling.csv";
+        ResidualStructureAnalyzer::analyze(file);
+    }
+    else if (module == "oscillation_test") {
+        string file = (argc > 2) ? argv[2] : "data/csv/drift_scaling.csv";
+        OscillationSignificanceAnalyzer::analyze(file);
     }
     else if (module == "all") {
         std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";
