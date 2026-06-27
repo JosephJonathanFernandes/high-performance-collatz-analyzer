@@ -28,6 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Influence Analyzer...
+echo Build Successful! Running Endpoint Sensitivity Analyzer...
 echo ========================================================
-.\build\collatz.exe influence
+.\build\collatz.exe endpoint_test

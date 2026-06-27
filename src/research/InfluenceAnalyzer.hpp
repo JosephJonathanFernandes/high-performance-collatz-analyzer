@@ -148,9 +148,19 @@ public:
         }
 
         auto format_N = [](double N) {
-            if (N >= 1e9) return std::to_string(static_cast<int>(N / 1e9)) + "B";
-            if (N >= 1e6) return std::to_string(static_cast<int>(N / 1e6)) + "M";
-            return std::to_string(static_cast<int>(N));
+            std::ostringstream ss;
+            if (N >= 1e9) {
+                double val = N / 1e9;
+                if (val == std::floor(val)) ss << static_cast<int>(val) << "B";
+                else ss << std::fixed << std::setprecision(1) << val << "B";
+            } else if (N >= 1e6) {
+                double val = N / 1e6;
+                if (val == std::floor(val)) ss << static_cast<int>(val) << "M";
+                else ss << std::fixed << std::setprecision(1) << val << "M";
+            } else {
+                ss << static_cast<int>(N);
+            }
+            return ss.str();
         };
 
         std::cout << "Leverage threshold  : " << std::fixed << std::setprecision(4) << leverage_threshold << " (2p/n)\n";
