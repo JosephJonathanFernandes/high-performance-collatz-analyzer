@@ -193,7 +193,15 @@ int main(int argc, char* argv[]) {
     }
     else if (module == "finite_size_fit") {
         string file = (argc > 2) ? argv[2] : "data/csv/drift_convergence_summary.csv";
-        double predict_N = (argc > 3) ? stod(argv[3]) : 0.0;
+        double predict_N = 0.0;
+        if (argc > 3) {
+            try {
+                predict_N = stod(argv[3]);
+            } catch (...) {
+                cerr << "[ERROR] Invalid numeric prediction limit provided.\n";
+                return 1;
+            }
+        }
         FiniteSizeFitAnalyzer::analyze(file, predict_N);
     }
     else if (module == "all") {
