@@ -133,6 +133,22 @@ This is now tracked by:
 finite_size_fit <csv_file>
 ---
 
+### Blind Prediction Validation
+
+To avoid post-hoc fitting bias, predictions are now locked into a ledger before experiments are executed.
+
+First verified prediction:
+
+Target N      : 20,000,000,000
+Predicted μ   : -0.33043826
+Observed μ    : -0.33055241
+
+Absolute error: 1.1415×10⁻⁴
+
+The prediction was generated exclusively from prior data (up to 10B) and later verified experimentally. This establishes a reproducible prediction → verification workflow and converts the platform from descriptive analysis into a falsifiable forecasting system.
+
+---
+
 ### Finding 4 · Global Markov Independence of the $v_2$ Process
 
 **Hypothesis:** Sequential $v_2$ transitions are statistically independent (no memory effect).

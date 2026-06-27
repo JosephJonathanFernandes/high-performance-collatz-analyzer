@@ -40,6 +40,7 @@
 #include "research/DriftLawAnalyzer.hpp"
 #include "research/DriftConvergenceAnalyzer.hpp"
 #include "research/FiniteSizeFitAnalyzer.hpp"
+#include "research/PredictionAuditor.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -76,6 +77,7 @@ void print_help() {
     cout << "  drift_law          <limit>               Test S(n) ≈ A + B*(log(n)/|mu_n|)\n";
     cout << "  drift_convergence  <limit>               Test if mu_k -> mu_infty as k increases\n";
     cout << "  finite_size_fit    <file.csv> [N]        LOOCV fit mu(N) = a + b/logN + c/logN^2\n";
+    cout << "  audit              <md_file> <csv>       Audit blind predictions vs reality\n";
     cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
@@ -95,7 +97,7 @@ int main(int argc, char* argv[]) {
     string module = argv[1];
     unsigned long long limit = 1000000;
 
-    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit") {
+    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit" && module != "audit") {
         try {
             limit = stoull(argv[2]);
         } catch (...) {
@@ -203,6 +205,27 @@ int main(int argc, char* argv[]) {
             }
         }
         FiniteSizeFitAnalyzer::analyze(file, predict_N);
+    }
+    else if (module == "audit") {
+        string md_file = "data/predictions/blind_predictions.md";
+        string csv_file = "data/csv/drift_scaling.csv";
+        
+        if (argc > 3) {
+            string subcmd = argv[2];
+            if (subcmd == "add" && argc > 4) {
+                unsigned long long n = stoull(argv[3]);
+                double pred = stod(argv[4]);
+                double mae = (argc > 5) ? stod(argv[5]) : 0.0;
+                PredictionAuditor::add_prediction(md_file, n, pred, mae);
+                return 0;
+            } else if (subcmd == "verify" && argc > 4) {
+                unsigned long long n = stoull(argv[3]);
+                double actual = stod(argv[4]);
+                PredictionAuditor::verify_prediction(md_file, csv_file, n, actual);
+                return 0;
+            }
+        }
+        PredictionAuditor::analyze(md_file, csv_file);
     }
     else if (module == "all") {
         std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";
