@@ -84,7 +84,7 @@ private:
     }
 
 public:
-    static void analyze(const std::string& csv_file) {
+    static void analyze(const std::string& csv_file, double predict_N = 0.0) {
         std::cout << "\n========================================================\n";
         std::cout << "Research Module 22: Finite Size Fit Analyzer\n";
         std::cout << "Model: mu(N) = a + b/log(N) + c/log(N)^2\n";
@@ -201,7 +201,23 @@ public:
                       << std::setw(15) << std::fixed << std::setprecision(8) << oos_predictions[i]
                       << std::scientific << std::setprecision(6) << oos_residuals[i] << "\n";
         }
-        std::cout << "========================================================\n\n";
+        std::cout << "========================================================\n";
+
+        if (predict_N > 1.0) {
+            double logN = std::log(predict_N);
+            double correction = b / logN + c / (logN * logN);
+            double predicted_mu = a + correction;
+            double distance = std::abs(predicted_mu - a);
+
+            std::cout << "\n--- Extrapolation ---\n";
+            std::cout << std::left << std::setw(18) << "N" << ": " << std::fixed << std::setprecision(0) << predict_N << "\n";
+            std::cout << std::setw(18) << "Predicted mu(N)" << ": " << std::fixed << std::setprecision(8) << predicted_mu << "\n";
+            std::cout << std::setw(18) << "Correction term" << ": " << std::scientific << std::setprecision(8) << correction << "\n";
+            std::cout << std::setw(18) << "Asymptotic limit" << ": " << std::fixed << std::setprecision(8) << a << "\n";
+            std::cout << std::setw(18) << "Distance to limit" << ": " << std::scientific << std::setprecision(8) << distance << "\n";
+            std::cout << "========================================================\n";
+        }
+        std::cout << "\n";
     }
 };
 

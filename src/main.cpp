@@ -75,7 +75,7 @@ void print_help() {
     cout << "  v2_markov          <limit>               Global Markov transition matrix P(v2|v2)\n";
     cout << "  drift_law          <limit>               Test S(n) ≈ A + B*(log(n)/|mu_n|)\n";
     cout << "  drift_convergence  <limit>               Test if mu_k -> mu_infty as k increases\n";
-    cout << "  finite_size_fit    <file.csv>            LOOCV fit mu(N) = a + b/logN + c/logN^2\n";
+    cout << "  finite_size_fit    <file.csv> [N]        LOOCV fit mu(N) = a + b/logN + c/logN^2\n";
     cout << "  k_convergence      <file> <start_depth>  Trace k(depth) stability\n";
     cout << "  all                <limit>               Run all core modules sequentially\n";
     cout << "========================================================\n";
@@ -193,7 +193,8 @@ int main(int argc, char* argv[]) {
     }
     else if (module == "finite_size_fit") {
         string file = (argc > 2) ? argv[2] : "data/csv/drift_convergence_summary.csv";
-        FiniteSizeFitAnalyzer::analyze(file);
+        double predict_N = (argc > 3) ? stod(argv[3]) : 0.0;
+        FiniteSizeFitAnalyzer::analyze(file, predict_N);
     }
     else if (module == "all") {
         std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";
