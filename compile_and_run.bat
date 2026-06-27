@@ -28,6 +28,7 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running LOOCV...
+echo Build Successful! Running Blind Extrapolation for 20B...
 echo ========================================================
-.\build\collatz.exe finite_size_fit data\csv\drift_scaling.csv
+.\build\collatz.exe finite_size_fit data\csv\drift_scaling.csv 20000000000
+
