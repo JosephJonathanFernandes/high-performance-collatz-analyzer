@@ -193,9 +193,10 @@ N              Predicted μ      Status
 500B           -0.32454050      Pending
 ```
 
-**Policy:**
+**Prediction policy:**
+- Frozen model date: 2026-06-27
 - Predictions are committed before computation.
-- Parameters remain fixed until all pending tests complete.
+- No additional predictions added until all currently pending predictions are resolved.
 
 ---
 
