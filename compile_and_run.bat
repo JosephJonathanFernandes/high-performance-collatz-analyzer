@@ -28,6 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Oscillation Significance Analyzer...
+echo Build Successful! Running Stability Analyzer...
 echo ========================================================
-.\build\collatz.exe oscillation_test
+.\build\collatz.exe stability
