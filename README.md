@@ -179,7 +179,24 @@ Observed μ    : -0.33055241
 
 Absolute error: 1.1415×10⁻⁴
 
-The prediction was generated exclusively from prior data (up to 10B) and later verified experimentally. This establishes a reproducible prediction → verification workflow and converts the platform from descriptive analysis into a falsifiable forecasting system.
+### Blind Prediction Roadmap
+
+**Locked model:**
+$\mu(N) = a + b/\log(N) + c/\log^2(N)$
+*(Model frozen after Module 25: 11-point fit through 20B. Future data used only for verification.)*
+
+**Pending predictions:**
+```text
+N              Predicted μ      Status
+------------------------------------------------
+20B            -0.33043826      Verified ✓
+50B            -0.32859547      Pending
+100B           -0.32727867      Pending
+```
+
+**Policy:**
+- Predictions are committed before computation.
+- Parameters remain fixed until all pending tests complete.
 
 ---
 

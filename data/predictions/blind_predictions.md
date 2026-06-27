@@ -28,3 +28,23 @@ Model             : CLI Added
 
 Predicted μ       : -0.32999512
 ```
+
+**Blind Prediction Record #3**
+
+```text
+Target limit      : 50000000000
+Prediction date   : 2026-06-27
+Model             : CLI Added
+
+Predicted μ       : -0.32859547
+```
+
+**Blind Prediction Record #4**
+
+```text
+Target limit      : 100000000000
+Prediction date   : 2026-06-27
+Model             : CLI Added
+
+Predicted μ       : -0.32727867
+```
