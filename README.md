@@ -103,11 +103,11 @@ Module 22 fits:
 
 μ(N) = a + b/log(N) + c/log²(N)
 
-Current fit using 11 measurements:
+Current best empirical fit (subject to future refinement):
 
-* a = -0.290851
+* Asymptote (a) ≈ -0.2916
 * R² = 0.999995
-* Mean Absolute Error = 5.01 × 10⁻⁵
+* Mean Absolute Error = 5.75 × 10⁻⁵
 
 ### Out-of-Sample Validation
 
@@ -131,6 +131,40 @@ This changes the earlier conclusion:
 This is now tracked by:
 
 finite_size_fit <csv_file>
+---
+
+### Module 25 — Asymptotic Law Explorer
+
+**Purpose:**
+Determine which finite-size correction law best explains the observed drift scaling $\mu(N)$.
+
+**Competing models tested:**
+- $\mu(N) = a + b / \log(N)$
+- $\mu(N) = a + b / \log^2(N)$
+- $\mu(N) = a + b / \log(N) + c / \log^2(N)$
+- $\mu(N) = a + b / \log(N\log(N))$
+- $\mu(N) = a + b / \sqrt{\log(N)}$
+- $\mu(N) = a + b / N$
+- $\mu(N) = a + b / N^{0.5}$
+
+**Results:**
+Winner: $\mu(N) = a + b / \log(N) + c / \log^2(N)$
+
+**Metrics:**
+- **R²**: 0.999995
+- **LOOCV MAE**: $5.75 \times 10^{-5}$
+- **AIC**: -261.77
+- **BIC**: -260.08
+
+**Key observation:**
+Finite-size drift corrections appear logarithmic rather than power-law. The leading correction behaves approximately like:
+$$ \mu(N) - \mu_\infty = O(1/\log(N)) $$
+with measurable second-order structure:
+$$ O(1/\log^2(N)) $$
+
+**Implication:**
+The observed drift constant is not itself converging directly; instead, it approaches an asymptotic limit through a slowly decaying logarithmic correction.
+
 ---
 
 ### Blind Prediction Validation
