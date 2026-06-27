@@ -161,7 +161,7 @@ consistently achieved the strongest performance across R², LOOCV MAE, AIC, and 
 Observed finite-size corrections appear to be more consistent with logarithmic scaling than with simple power-law alternatives over the tested range.
 
 **Important note:**
-This should be interpreted as an empirical model-selection result rather than a proof of the true asymptotic form. Future blind predictions at larger scales (20B, 50B, 100B, and beyond) will be used for independent validation. Blind predictions to 50B and 100B remained stable under jackknife resampling, with forecast variability below 3×10⁻⁵ despite moderate movement in individual fitted parameters.
+This should be interpreted as an empirical model-selection result rather than a proof of the true asymptotic form. Future blind predictions at larger scales (20B, 50B, 100B, and beyond) will be used for independent validation. Stress testing via jackknife resampling, Cook's distance analysis, and endpoint removal showed that while endpoint observations strongly affect individual fitted parameters, extrapolated forecasts remained stable. Even removing both early and late anchor points shifted 100B predictions by only ~1×10⁻⁴.
 
 ---
 
