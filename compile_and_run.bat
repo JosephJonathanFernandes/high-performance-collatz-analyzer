@@ -28,8 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Prediction Auditor...
+echo Build Successful! Running Asymptotic Law Explorer...
 echo ========================================================
-.\build\collatz.exe audit
-
-
+.\build\collatz.exe asymptotic_law
