@@ -165,6 +165,36 @@ This should be interpreted as an empirical model-selection result rather than a 
 
 ---
 
+### Module 27 — Oscillation Significance Analyzer
+
+Module 26 identified a moderate oscillatory fit in the residuals of the finite-size drift law:
+$$ r(N) = d \cdot \sin(\alpha \log(N) + \beta) $$
+
+**Observed fit quality:**
+- Oscillator R² = 0.72878
+
+Because the oscillator emerged from a frequency sweep over many candidate values of $\alpha$, a Monte Carlo permutation test was used to evaluate statistical significance.
+
+**Procedure:**
+- Shuffle residual ordering 10,000 times
+- Repeat the complete frequency search on each shuffle
+- Record the strongest oscillator fit from each random realization
+- Compare against the observed fit
+
+**Results:**
+- Simulations exceeding observed fit: 1730 / 10000
+- Empirical p-value: 0.173
+
+**Interpretation:**
+The apparent oscillatory structure is consistent with a look-elsewhere effect rather than evidence of genuine log-periodic behavior.
+
+**Current conclusion:**
+After removing the finite-size law
+$$ \mu(N) = a + b/\log(N) + c/\log^2(N) $$
+no statistically convincing low-order residual structure remains in the tested range.
+
+---
+
 ### Blind Prediction Validation
 
 To avoid post-hoc fitting bias, predictions are now locked into a ledger before experiments are executed.
