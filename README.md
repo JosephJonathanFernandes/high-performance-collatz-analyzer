@@ -135,20 +135,21 @@ finite_size_fit <csv_file>
 
 ### Module 25 — Asymptotic Law Explorer
 
-**Purpose:**
-Determine which finite-size correction law best explains the observed drift scaling $\mu(N)$.
+Module 25 compares competing finite-size correction laws for the observed drift $\mu(N)$.
 
-**Competing models tested:**
-- $\mu(N) = a + b / \log(N)$
-- $\mu(N) = a + b / \log^2(N)$
-- $\mu(N) = a + b / \log(N) + c / \log^2(N)$
-- $\mu(N) = a + b / \log(N\log(N))$
-- $\mu(N) = a + b / \sqrt{\log(N)}$
-- $\mu(N) = a + b / N$
-- $\mu(N) = a + b / N^{0.5}$
+Candidate families included:
+- $1/\log(N)$
+- $1/\log^2(N)$
+- $1/\log(N) + 1/\log^2(N)$
+- $1/\log(N\cdot\log(N))$
+- $1/\sqrt{\log(N)}$
+- $1/N$
+- $1/N^{0.5}$
 
 **Results:**
-Winner: $\mu(N) = a + b / \log(N) + c / \log^2(N)$
+The model 
+$\mu(N) = a + b/\log(N) + c/\log^2(N)$ 
+consistently achieved the strongest performance across R², LOOCV MAE, AIC, and BIC.
 
 **Metrics:**
 - **R²**: 0.999995
@@ -156,14 +157,11 @@ Winner: $\mu(N) = a + b / \log(N) + c / \log^2(N)$
 - **AIC**: -261.77
 - **BIC**: -260.08
 
-**Key observation:**
-Finite-size drift corrections appear logarithmic rather than power-law. The leading correction behaves approximately like:
-$$ \mu(N) - \mu_\infty = O(1/\log(N)) $$
-with measurable second-order structure:
-$$ O(1/\log^2(N)) $$
+**Current interpretation:**
+Observed finite-size corrections appear to be more consistent with logarithmic scaling than with simple power-law alternatives over the tested range.
 
-**Implication:**
-The observed drift constant is not itself converging directly; instead, it approaches an asymptotic limit through a slowly decaying logarithmic correction.
+**Important note:**
+This should be interpreted as an empirical model-selection result rather than a proof of the true asymptotic form. Future blind predictions at larger scales (20B, 50B, 100B, and beyond) will be used for independent validation.
 
 ---
 
@@ -192,6 +190,7 @@ N              Predicted μ      Status
 20B            -0.33043826      Verified ✓
 50B            -0.32859547      Pending
 100B           -0.32727867      Pending
+500B           -0.32454050      Pending
 ```
 
 **Policy:**
