@@ -28,6 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Stability Analyzer...
+echo Build Successful! Running Influence Analyzer...
 echo ========================================================
-.\build\collatz.exe stability
+.\build\collatz.exe influence
