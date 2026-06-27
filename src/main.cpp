@@ -47,6 +47,7 @@
 #include "research/StabilityAnalyzer.hpp"
 #include "research/InfluenceAnalyzer.hpp"
 #include "research/EndpointSensitivityAnalyzer.hpp"
+#include "research/BootstrapConfidenceEngine.hpp"
 
 using namespace collatz;
 using namespace collatz::research;
@@ -103,7 +104,7 @@ int main(int argc, char* argv[]) {
     string module = argv[1];
     unsigned long long limit = 1000000;
 
-    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit" && module != "audit" && module != "asymptotic_law" && module != "residuals" && module != "oscillation_test" && module != "stability" && module != "influence" && module != "endpoint_test") {
+    if (argc > 2 && module != "report" && module != "k_convergence" && module != "finite_size_fit" && module != "audit" && module != "asymptotic_law" && module != "residuals" && module != "oscillation_test" && module != "stability" && module != "influence" && module != "endpoint_test" && module != "bootstrap") {
         try {
             limit = stoull(argv[2]);
         } catch (...) {
@@ -256,6 +257,10 @@ int main(int argc, char* argv[]) {
     else if (module == "endpoint_test") {
         string file = (argc > 2) ? argv[2] : "data/csv/drift_scaling.csv";
         EndpointSensitivityAnalyzer::analyze(file);
+    }
+    else if (module == "bootstrap") {
+        string file = (argc > 2) ? argv[2] : "data/csv/drift_scaling.csv";
+        BootstrapConfidenceEngine::analyze(file);
     }
     else if (module == "all") {
         std::cout << "Running the 7 Core Research Paper Modules at limit: " << limit << "\n\n";

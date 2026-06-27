@@ -28,6 +28,6 @@ exit /b 1
 :success
 echo.
 echo ========================================================
-echo Build Successful! Running Endpoint Sensitivity Analyzer...
+echo Build Successful! Running Bootstrap Confidence Engine...
 echo ========================================================
-.\build\collatz.exe endpoint_test
+.\build\collatz.exe bootstrap
